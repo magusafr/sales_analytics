@@ -1,7 +1,3 @@
-SELECT *
-FROM iowa_drink_sales
-LIMIT 100;
-
 -- checking unique values
 SELECT COUNT(DISTINCT(store_name)) AS total_customer, -- plot with their sales
 	   COUNT(DISTINCT(zip_code)) AS zip_code, -- plot with their sales
@@ -91,19 +87,19 @@ rfm_cel2 AS(
 			FROM rfm_cel
 			ORDER BY rfm_cell --min 3 and max 12
 			),
-tes AS(
+rfm_segment AS (
+				select store_name , rfm_recency, rfm_frequency, rfm_monetary, rfm_cell_string,
+					case 
+						when CAST(rfm_cell_string AS integer) in (111, 113, 124, 112 , 121, 122, 123, 132, 211, 212, 114, 141, 213, 214) then '6_lost_customers'  --lost customers
+						when CAST(rfm_cell_string AS integer)  in (131, 133, 134, 142, 143, 244, 334, 343, 344, 144) then '5_slipping away, cannot lose' -- (Big spenders who haven’t purchased lately) slipping away
+						when CAST(rfm_cell_string AS integer)  in (311, 411, 331, 412, 413, 414, 421, 423, 424) then '4_new customers'
+						when CAST(rfm_cell_string AS integer)  in (222, 223, 233, 322, 221, 224, 231, 232, 234, 241, 242, 243) then '3_potential churners'
+						when CAST(rfm_cell_string AS integer)  in (323, 333, 321, 422, 332, 432, 312, 313, 314, 324, 341, 342) then '2_active' --(Customers who buy often & recently, but at low price points)
+						when CAST(rfm_cell_string AS integer)  in (433, 434, 443, 444, 431, 441, 442) then '1_loyal'
+					end rfm_segment
+				FROM rfm_cel2
+				)
 
-select store_name , rfm_recency, rfm_frequency, rfm_monetary, rfm_cell_string,
-	case 
-		when CAST(rfm_cell_string AS integer) in (111, 113, 124, 112 , 121, 122, 123, 132, 211, 212, 114, 141, 213, 214) then 'lost_customers'  --lost customers
-		when CAST(rfm_cell_string AS integer)  in (131, 133, 134, 142, 143, 244, 334, 343, 344, 144) then 'slipping away, cannot lose' -- (Big spenders who haven’t purchased lately) slipping away
-		when CAST(rfm_cell_string AS integer)  in (311, 411, 331, 412, 413, 414, 421, 423, 424) then 'new customers'
-		when CAST(rfm_cell_string AS integer)  in (222, 223, 233, 322, 221, 224, 231, 232, 234, 241, 242, 243) then 'potential churners'
-		when CAST(rfm_cell_string AS integer)  in (323, 333, 321, 422, 332, 432, 312, 313, 314, 324, 341, 342) then 'active' --(Customers who buy often & recently, but at low price points)
-		when CAST(rfm_cell_string AS integer)  in (433, 434, 443, 444, 431, 441, 442) then 'loyal'
-	end rfm_segment
-FROM rfm_cel2
-)
-
-SELECT *
-FROM tes;
+SELECT rfm_segment, COUNT(*)
+FROM rfm_segment
+GROUP BY rfm_segment;

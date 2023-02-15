@@ -21,7 +21,6 @@ SELECT EXTRACT(YEAR FROM date) AS yr,
 	   SUM(sale_dollars) AS revenue
 FROM iowa_drink_sales
 GROUP BY yr
-ORDER BY revenue;
 ORDER BY revenue DESC;
 
 -- What was the best month for sales ? How much was earned that month?

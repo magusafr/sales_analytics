@@ -94,8 +94,8 @@ rfm_segment AS (
 			when CAST(rfm_cell_string AS integer) IN (131, 133, 134, 142, 143, 244, 334, 343, 344, 144) then '5_slipping away, cannot lose' -- (Big spenders who haven’t purchased lately) slipping away
 			when CAST(rfm_cell_string AS integer) IN (311, 411, 331, 412, 413, 414, 421, 423, 424) then '4_new customers'
 			when CAST(rfm_cell_string AS integer) IN (222, 223, 233, 322, 221, 224, 231, 232, 234, 241, 242, 243) then '3_potential churners'
-			when CAST(rfm_cell_string AS integer) IN (323, 333, 321, 422, 332, 432, 312, 313, 314, 324, 341, 342) then '2_active' --(Customers who buy often & recently, but at low price points)
-			when CAST(rfm_cell_string AS integer) IN (433, 434, 443, 444, 431, 441, 442) then '1_loyal'
+			when CAST(rfm_cell_string AS integer) IN (323, 333, 321, 422, 332, 432, 312, 313, 314, 324, 342) then '2_active' --(Customers who buy often & recently, but at low price points)
+			when CAST(rfm_cell_string AS integer) IN (433, 434, 443, 444, 431, 441, 442, 341) then '1_loyal'
 		end rfm_segment
 	FROM rfm_cel2
 		)
